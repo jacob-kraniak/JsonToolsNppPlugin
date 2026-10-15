@@ -11,9 +11,6 @@ on:
       - 'testfiles/**'
       - 'translation/**'
 
-permissions:
-  contents: read
-
 jobs:
   build:
     runs-on: windows-2022
@@ -25,13 +22,13 @@ jobs:
 
     steps:
     - name: Checkout repo
-      uses: actions/checkout@v7
+      uses: actions/checkout@v6
 
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v3.0.0
 
     - name: MSBuild of solution
-      run: msbuild JsonToolsNppPlugin/JsonToolsNppPlugin.sln /p:configuration="${{ matrix.build_configuration }}" /p:platform="${{ matrix.build_platform }}" /m /verbosity:minimal
+      run: msbuild JsonToolsNppPlugin/JsonToolsNppPlugin.sln /restore /p:configuration="${{ matrix.build_configuration }}" /p:platform="${{ matrix.build_platform }}" /m /verbosity:minimal
 
     - name: Archive artifacts for x64
       if: matrix.build_platform == 'x64' && matrix.build_configuration == 'Release'
